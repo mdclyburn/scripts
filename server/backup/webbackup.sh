@@ -6,7 +6,7 @@ backup_dir="/mnt/backup"
 name="web_${current_date}"
 
 printf "Archiving...\n"
-tar -cvf ${backup_dir}/${name}.tar ${target_dir}/* >/dev/null
+tar -cvf ${backup_dir}/${name}.tar -C ${target_dir} . >/dev/null
 
 printf "Compressing...\n"
 pixz ${backup_dir}/${name}.tar ${backup_dir}/${name}.tar.pxz
