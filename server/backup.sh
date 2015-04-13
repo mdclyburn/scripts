@@ -18,16 +18,26 @@ fi
 # Exclude the following paths.
 exclude_paths="'${dest_dir}','/dev/*','/home/*','/media/*','/mnt/*','/proc/*','/run/*','/srv/btsync/*','/sys/*','/usr/portage/*','/usr/src/*','/var/tmp/*'"
 
-DUPLICITY_CMD="duplicity --full-if-older-than 2W --no-encryption -v 8 --exclude={${exclude_paths}} / file://${dest_dir}"
+DUPLICITY_CMD="duplicity --full-if-older-than 2W --no-encryption --exclude={${exclude_paths}} / file://${dest_dir}"
+DUPLICITY_CLEAN_CMD="duplicity remove-older-than 6M file://${dest_dir}"
 
 eval $DUPLICITY_CMD
 
 if [ $? != "0" ]
 then
-	printf "Backup utility reported error.\n"
+	printf "Backup utility reported error. Not performing cleanup.\n"
+	exit 1
+fi
+
+printf "Cleaning...\n"
+eval $DUPLICITY_CLEAN_CMD
+
+if [ $? != "0" ]
+then
+	printf "Cleanup finished with error.\n"
 	exit 1
 else
-	printf "Backup complete!\n"
+	printf "Operation complete!\n"
 	exit 0
 fi
 
