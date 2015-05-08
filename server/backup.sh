@@ -8,17 +8,18 @@ if test "$(id -u)" != "0"; then
 	exit 0
 fi
 
-dest_dir="/mnt/backup"
+dest_dir="/mnt/backup/duplicity/server"
 
 if [ -z $dest_dir ]; then
 	printf "Fatal: backup location is not set.\n"
 	exit 1
 fi
 
-# Exclude the following paths.
-exclude_paths="'${dest_dir}','/dev/*','/home/*','/media/*','/mnt/*','/proc/*','/run/*','/srv/btsync/*','/sys/*','/usr/portage/*','/usr/src/*','/var/tmp/*'"
+# Parameters
+exclude_paths="'${dest_dir}','/dev/*','/media/*','/mnt/*','/proc/*','/run/*','/srv/btsync/*','/sys/*','/usr/portage/*','/usr/src/*','/var/tmp/*'"
+volume_size="100"
 
-DUPLICITY_CMD="duplicity --full-if-older-than 2W --no-encryption --exclude={${exclude_paths}} / file://${dest_dir}"
+DUPLICITY_CMD="duplicity --full-if-older-than 1W --no-encryption --volsize $volume_size --exclude={${exclude_paths}} / file://${dest_dir}"
 DUPLICITY_CLEAN_CMD="duplicity remove-older-than 6M file://${dest_dir}"
 
 eval $DUPLICITY_CMD
