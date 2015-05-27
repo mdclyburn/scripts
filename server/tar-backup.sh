@@ -17,6 +17,7 @@ fi
 
 # set name
 backup_name="$(uname -r)_$(date +'%Y%M%d-%H%M%S')"
+printf "Backing up system. (${backup_name})\n"
 
 tar -c --exclude={'${1}/${backup_name}.tar','dev/*','home/*','media/*','mnt/*','proc/*','run/*','srv/btsync/*','srv/syncthing/*','sys/*','tmp/*','/usr/portage/*','/var/tmp/*'} -Ipixz -f ${1}/${backup_name}.tar.pxz -C / .
 
