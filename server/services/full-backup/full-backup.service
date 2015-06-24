@@ -1,0 +1,7 @@
+[Unit]
+Description=Full system backup
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/backup /mnt/backup/archives/server
+

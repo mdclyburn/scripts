@@ -1,0 +1,10 @@
+[Unit]
+Description=Weekly system backup
+
+[Timer]
+Persistent=true
+OnCalendar=Sat, 05:30
+AccuracySec=10min
+
+[Install]
+WantedBy=multi-user.target
