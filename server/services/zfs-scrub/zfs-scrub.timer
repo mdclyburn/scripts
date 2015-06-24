@@ -1,0 +1,10 @@
+[Unit]
+Description=Weekly ZFS pool scrub
+
+[Timer]
+Persistent=false
+OnCalendar=Fri, 05:30
+AccuracySec=1hr
+
+[Install]
+WantedBy=multi-user.target

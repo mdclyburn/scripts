@@ -1,0 +1,7 @@
+[Unit]
+Description=ZFS pool scrub
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/zpool scrub zmain
+
