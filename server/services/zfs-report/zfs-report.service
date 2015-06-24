@@ -1,0 +1,7 @@
+[Unit]
+Description=ZFS Subsystem Report
+After=zfs.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/genzfsreport

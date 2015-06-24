@@ -1,0 +1,10 @@
+[Unit]
+Description=Timer for ZFS Reporting
+
+[Timer]
+OnBootSec=30min
+OnUnitActiveSec=30min
+AccuracySec=5min
+
+[Install]
+WantedBy=timers.target
