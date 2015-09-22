@@ -3,17 +3,17 @@
 # Encode all FLAC files in the current directory to MP3
 #
 # Arguments =====
-# 1: bitrate in kBps
+# 1: bitrate in Kbps
 #
 
 if [ -z $1 ]
 then
-	printf "reencode <bit rate (kBps)> [-a]\n"
+	printf "reencode <bit rate (Kbps)> [-a]\n"
 	exit 1
 else
 	if [ -z $2 ]
 	then
-		printf "Will encode %i FLAC files to %ikBps MP3. OK? [y/N] " "$(ls *.flac | wc -l)" "$1"
+		printf "Will encode %i FLAC files to %iKbps MP3. OK? [y/N] " "$(ls *.flac | wc -l)" "$1"
 		read response
 		if [ "$response" != "y" ] && [ "$response" != "Y" ]
 		then
