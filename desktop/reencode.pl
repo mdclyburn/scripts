@@ -8,6 +8,8 @@
 # reencode.pl <bit rate (Kbps)>
 #
 
+use Term::ANSIColor;
+
 # check for sane values
 die "Usage: reencode.pl <bit rate (Kbps)>\n" if (! @ARGV);
 
@@ -18,7 +20,7 @@ die "Use a sane bit rate!\n" if ($bit_rate < 64);
 
 die "There are no FLAC files here...\n" if (scalar @files == 0);
 
-print "Will encode ", scalar @files, " files to $bit_rate MP3 files. OK? [Y/n] ";
+print "Will encode ", scalar @files, " files to ${bit_rate}Kbps MP3 files. OK? [Y/n] ";
 $answer = <STDIN>;
 chomp $answer;
 
@@ -32,7 +34,7 @@ if ($answer eq "" || $answer eq "Y" || $answer eq "y") {
 	# split up tasks
 	$id = 0;
 	while ($id < get_core_count()) {
-		push(@jobs_completed, 0);
+#		push(@jobs_completed, 0);
 		$pid = fork();
 
 		if ($pid != 0) { # parent
@@ -48,6 +50,7 @@ if ($answer eq "" || $answer eq "Y" || $answer eq "y") {
 	if ($pid != 0) { # parent: should wait
 		for ($i = 0; $i <= $#children; $i++) {
 			waitpid($children[$i], 0);
+			warn "Problems occured.\n" if ($? != 0);
 		}
 	}
 	else { # child: do work
@@ -59,14 +62,18 @@ if ($answer eq "" || $answer eq "Y" || $answer eq "y") {
 		# convert files
 		$status = 0;
 		for ($i = $id; $i <= $#files; $i += get_core_count()) {
-			print "$id: ", $files[$i], ".flac -> ", $files[$i], ".mp3\n";
+
+			# perform conversion
 			$flac_file = $files[$i] . ".flac";
 			$mp3_file = $files[$i] . ".mp3";
-
-			system("ffmpeg -loglevel quiet -n -i '$flac_file' -ab $bit_rate '$mp3_file'");
+			system("ffmpeg -loglevel quiet -n -i \"$flac_file\" -ab $bit_rate \"$mp3_file\"");
+			
 			if ($? != 0) {
-				print "Something went wrong while encoding $flac_file.\n";
+				print "$id: $flac_file -> $mp3_file ", colored("failed\n", "red\n");
 				$status = 1;
+			}
+			else {
+				print "$id: $flac_file -> $mp3_file ", colored("done\n", "green");
 			}
 		}
 
