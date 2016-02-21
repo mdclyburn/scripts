@@ -3,7 +3,9 @@
 # reencode.pl
 #
 # Encode all FLAC files in the current directory to MP3 with
-# the specified bitrate.
+# the specified bitrate. This script performs multiple transocding
+# jobs at a time. The number of child processes it creates is equal
+# to the number of cores on the system.
 #
 # reencode.pl <bit rate (Kbps)>
 #
