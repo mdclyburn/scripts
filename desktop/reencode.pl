@@ -68,7 +68,7 @@ if ($answer eq "" || $answer eq "Y" || $answer eq "y") {
 			# perform conversion
 			$flac_file = $files[$i] . ".flac";
 			$mp3_file = $files[$i] . ".mp3";
-			system("ffmpeg -loglevel quiet -n -i \"$flac_file\" -ab $bit_rate \"$mp3_file\"");
+			system("ffmpeg -loglevel quiet -n -i \"$flac_file\" -ab $bit_rate" . "k" . " \"$mp3_file\"");
 			
 			if ($? != 0) {
 				print "$id: $flac_file -> $mp3_file ", colored("failed\n", "red\n");
