@@ -92,9 +92,11 @@ exit;
 # count number of CPU cores on the system
 sub get_core_count {
 	if (`uname -a` =~ /Linux/) {
+		# Linux has this information in /proc/cpuinfo.
 		($cc) = `cat /proc/cpuinfo` =~ /cpu cores\s+: (\d+)/;
 	}
-	else { # assume we can use sysctl
+	else {
+		# This works with the BSDs (at least FreeBSD) and, by extension, Mac OS X.
 		$cc = `sysctl -n hw.ncpu`;
 	}
 
