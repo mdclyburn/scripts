@@ -25,7 +25,7 @@ def reencode(args):
                file_name=file_name
            )
     try:
-        run(cmd, check=True)
+        run(cmd, shell=True, check=True)
     except CalledProcessError:
         print("failed to encode: ", file_name, file=sys.stderr)
         return 1
