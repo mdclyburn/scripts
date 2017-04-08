@@ -3,9 +3,9 @@
 # reencode.pl
 #
 # Encode all FLAC files in the current directory to MP3 with
-# the specified bitrate. This script performs multiple transocding
-# jobs at a time. The number of child processes it creates is equal
-# to the number of cores on the system.
+# the quality selector as provided by ffmpeg. This script performs
+# multiple jobs at a time. The number of child processes it creates
+# is equal to the number of cores on the system.
 #
 # reencode.pl <bit rate (Kbps)>
 #
@@ -13,16 +13,16 @@
 use Term::ANSIColor;
 
 # check for sane values
-die "Usage: reencode.pl <bit rate (Kbps)>\n" if (! @ARGV);
+die "Usage: reencode.pl <quality selector>\n" if (! @ARGV);
 
-$bit_rate = $ARGV[0];
-die "Use a sane bit rate!\n" if ($bit_rate < 64);
+$quality_selector = $ARGV[0];
+die "Use a sane quality selector!\n" if ($quality_selector < 0 || $quality_selector > 9);
 
 @files = <*.flac>;
 
 die "There are no FLAC files here...\n" if (scalar @files == 0);
 
-print "Will encode ", scalar @files, " files to ${bit_rate}Kbps MP3 files. OK? [Y/n] ";
+print "Will encode ", scalar @files, " files to quality $quality_selector MP3 files. OK? [Y/n] ";
 $answer = <STDIN>;
 chomp $answer;
 
@@ -68,8 +68,8 @@ if ($answer eq "" || $answer eq "Y" || $answer eq "y") {
 			# perform conversion
 			$flac_file = $files[$i] . ".flac";
 			$mp3_file = $files[$i] . ".mp3";
-			system("ffmpeg -loglevel quiet -n -i \"$flac_file\" -ab $bit_rate" . "k" . " \"$mp3_file\"");
-			
+			system("ffmpeg -loglevel quiet -n -i \"$flac_file\" -q:a $quality_selector" . " \"$mp3_file\"");
+
 			if ($? != 0) {
 				print "$id: $flac_file -> $mp3_file ", colored("failed\n", "red\n");
 				$status = 1;
