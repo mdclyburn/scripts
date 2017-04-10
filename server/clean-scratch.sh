@@ -12,7 +12,7 @@ printf "\nCleaning up %s:\n" "$SCRATCH_DIR"
 
 # Delete files older than RETENTION_PERIOD
 # We're using ctime to determine the age of the files.
-find $SCRATCH_DIR -cmin +$RETENTION_PERIOD -type f \( -not -path './About Scratch.txt' \) -delete -print
+find "$SCRATCH_DIR" -cmin +$RETENTION_PERIOD -type f \( -not -path "${SCRATCH_DIR}/README.txt" \) -delete -print
 
 # Directories eligible for deletion are empty, otherwise,
 # they are kept around until all of their files are gone.
